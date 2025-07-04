@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Activity Input | Carbon Tracker</title>
+  <link rel="stylesheet" href="UserActivityInput.css" />
+</head>
+<body>
+  <!-- Notification Bar -->
+  <div id="notification-bar" class="notification">
+    ✅ Activity successfully added!
+  </div>
+
+  <!-- Page Layout -->
+  <div class="container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <h2>Carbon Tracker</h2>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#" class="active">User Activity Input</a></li>
+        <li><a href="#">Dashboard</a></li>
+          <li><a href="#">Calculate Carbon</a></li>
+        <li><a href="#">Suggestions</a></li>
+        <li><a href="#">Logout</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div class="form-container">
+        <h2>Log Your Daily Activity</h2>
+        <form onsubmit="showNotification(event)">
+          <label for="category">Select Category</label>
+          <select id="category" required>
+            <option value="">--Choose--</option>
+            <option value="transport">Transport</option>
+            <option value="energy">Energy</option>
+            <option value="food">Food</option>
+            <option value="waste">Waste</option>
+          </select>
+
+          <label for="details">Activity Details</label>
+          <textarea id="details" rows="4" placeholder="e.g., Drove 10 km by car" required></textarea>
+
+          <div class="btn-group">
+            <button type="submit">Submit</button>
+            <button type="button" onclick="window.location.href='home.html'">Back to Home</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <!-- Notification Function -->
+  <script>
+    function showNotification(event) {
+      event.preventDefault();
+      const bar = document.getElementById('notification-bar');
+      bar.style.top = '0';
+      setTimeout(() => {
+        bar.style.top = '-60px';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

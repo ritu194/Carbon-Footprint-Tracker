@@ -1,0 +1,148 @@
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background-image: url('user input theme.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* Layout */
+.container {
+  display: flex;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.308); /* soft white overlay */
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background-color: #2e7d32; /* green */
+  color: white;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.sidebar ul {
+  list-style-type: none;
+}
+
+.sidebar li {
+  margin: 15px 0;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  display: block;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background-color: #1b5e20;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
+  background-color: #183e43a7;
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  max-width: 500px;
+  width: 100%;
+}
+
+.form-container h2 {
+  text-align: center;
+  color: #1b4726;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 8px;
+  color: #333;
+}
+
+select, textarea {
+  margin-bottom: 20px;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: none;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+button[type="submit"] {
+  background-color: #2e7d32;
+  color: white;
+}
+
+button[type="submit"]:hover {
+  background-color: #1b5e20;
+}
+
+button[type="button"] {
+  background-color: #ccc;
+  color: #333;
+}
+
+button[type="button"]:hover {
+  background-color: #999;
+}
+
+/* Notification Bar */
+.notification {
+  position: fixed;
+  top: -60px;
+  left: 0;
+  right: 0;
+  background-color: #4caf50; /* green */
+  color: white;
+  padding: 8px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 1000;
+  transition: top 0.4s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
