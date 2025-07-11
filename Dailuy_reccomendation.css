@@ -1,0 +1,89 @@
+/* ✅ Full background image setup */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: url('daily_recomendation.jpg') no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  background-color: rgb(207, 210, 154);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  font-weight: bold;
+  color: #34495e;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+button {
+  padding: 12px;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #27ae60;
+}
+
+.result-box {
+  margin-top: 25px;
+  padding: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background-image: url('recomendation.jpg');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+}
+
+.result-box .overlay {
+  background-color: rgba(0, 0, 0, 0.6); /* dark overlay */
+  padding: 20px;
+}
+
+.result-box h2 {
+  color: #ffffff;
+}
+
+.tip {
+  font-style: italic;
+  margin-top: 10px;
+}
+
+ul {
+  padding-left: 20px;
+  margin-top: 10px;
+}

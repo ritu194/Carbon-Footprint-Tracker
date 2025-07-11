@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carbon Footprint Tracker</title>
+  <link rel="stylesheet" href="daily_recomendation.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🌍 Daily Carbon Footprint Tracker</h1>
+
+    <form id="carbonForm">
+      <label for="transport">🚗 Transport Emissions (kg CO₂):</label>
+      <input type="number" id="transport" placeholder=>
+
+      <label for="energy">⚡ Energy Emissions (kg CO₂):</label>
+      <input type="number" id="energy" placeholder=>
+
+      <label for="food">🍽️ Food Emissions (kg CO₂):</label>
+      <input type="number" id="food" placeholder=>
+
+      <label for="waste">🗑️ Waste Emissions (kg CO₂):</label>
+      <input type="number" id="waste" placeholder=>
+
+      <label for="clothing">👕 Clothing Emissions (kg CO₂):</label>
+      <input type="number" id="clothing" placeholder=>
+
+      <button type="submit">Calculate Total Emission</button>
+    </form>
+
+    <div id="result" class="result-box"></div>
+  </div>
+
+  <script>
+    const suggestions = {
+      transport: [
+        "🚲 Use a bicycle or walk for short trips.",
+        "🚆 Take public transport instead of personal vehicles.",
+        "🚗 Carpool with friends or coworkers.",
+        "🛴 Use electric scooters for city travel."
+      ],
+      energy: [
+        "💡 Switch to energy-efficient LED bulbs.",
+        "🔌 Unplug devices when not in use.",
+        "🌞 Use natural light and ventilation.",
+        "🌿 Use energy-saving modes on appliances."
+      ],
+      food: [
+        "🥦 Eat more plant-based meals.",
+        "🍗 Replace red meat with chicken or vegetables.",
+        "🍽️ Avoid food waste by planning meals.",
+        "🌱 Buy local and seasonal produce."
+      ],
+      waste: [
+        "♻️ Separate and recycle household waste.",
+        "🛍️ Use reusable bags instead of plastic.",
+        "🥤 Avoid single-use plastics like cups or bottles.",
+        "📦 Repurpose or donate packaging materials."
+      ],
+      clothing: [
+        "👕 Buy fewer, higher-quality clothes.",
+        "🧺 Wash clothes in cold water.",
+        "♻️ Donate or recycle used garments.",
+        "🛒 Shop second-hand or vintage."
+      ]
+    };
+
+    document.getElementById('carbonForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const categories = ["transport", "energy", "food", "waste", "clothing"];
+      let total = 0;
+      let selectedTips = [];
+
+      categories.forEach(cat => {
+        const value = parseFloat(document.getElementById(cat).value) || 0;
+        if (value > 0) {
+          total += value;
+          const tipsForCat = suggestions[cat];
+          const shuffled = tipsForCat.sort(() => 0.5 - Math.random());
+          selectedTips.push(...shuffled.slice(0, 2));
+        }
+      });
+
+      const finalTips = selectedTips.slice(0, 5);
+
+      document.getElementById('result').innerHTML = `
+        <div class="overlay">
+          <h2>🧾 Your Total CO₂ Emission Today:</h2>
+          <p><strong>${total.toFixed(2)} kg CO₂</strong></p>
+          ${finalTips.length ? `
+            <p class="tip"><strong>🌿 Personalized Suggestions:</strong></p>
+            <ul>${finalTips.map(tip => `<li>${tip}</li>`).join('')}</ul>
+          ` : `<p class="tip">🎉 No significant emissions today. Keep it up!</p>`}
+        </div>
+      `;
+    });
+  </script>
+</body>
+</html>
