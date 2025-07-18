@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>User Activity Input | Carbon Tracker</title>
-  <link rel="stylesheet" href="UserActivityInput.css" />
+  <link rel="stylesheet" href="UserActivity.css" />
 </head>
 <body>
   <!-- Notification Bar -->
@@ -16,14 +16,15 @@
   <div class="container">
     <!-- Sidebar Navigation -->
     <aside class="sidebar">
-      <h2>Carbon Tracker</h2>
+      <h2>🌱 Carbon Tracker</h2>
       <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#" class="active">User Activity Input</a></li>
-        <li><a href="#">Dashboard</a></li>
-          <li><a href="#">Calculate Carbon</a></li>
-        <li><a href="#">Suggestions</a></li>
-        <li><a href="#">Logout</a></li>
+        <li><a href="admin-panel.html">👤 Admin Panel</a></li>
+        <li><a href="index.html">🏠 Home</a></li>
+        <li><a href="UserActivityInput.html" class="active">📝 Activity Input</a></li>
+        <li><a href="dashboard.html">📊 Dashboard</a></li>
+        <li><a href="carbon-calculator.html">🧮 Carbon Calculator</a></li>
+        <li><a href="recommendation.html">💡 Recommendations</a></li>
+        <li><a href="login.html">🚪 Logout</a></li>
       </ul>
     </aside>
 
@@ -46,14 +47,14 @@
 
           <div class="btn-group">
             <button type="submit">Submit</button>
-            <button type="button" onclick="window.location.href='home.html'">Back to Home</button>
+            <button type="button" onclick="window.location.href='index.html'">Back to Home</button>
           </div>
         </form>
       </div>
     </main>
   </div>
 
-  <!-- Notification Function -->
+  <!-- Notification Script -->
   <script>
     function showNotification(event) {
       event.preventDefault();

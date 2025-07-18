@@ -1,4 +1,4 @@
-/* Reset & Base Styles */
+/* Base */
 * {
   margin: 0;
   padding: 0;
@@ -17,28 +17,31 @@ body {
 .container {
   display: flex;
   height: 100vh;
-  background-color: rgba(255, 255, 255, 0.308); /* soft white overlay */
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Sidebar */
 .sidebar {
   width: 250px;
-  background-color: #2e7d32; /* green */
+  background-color: #2e7d32; /* Changed to match consistent theme */
   color: white;
   padding: 20px;
 }
 
 .sidebar h2 {
-  margin-bottom: 20px;
+  font-size: 20px;
   text-align: center;
+  margin-bottom: 30px;
+  color: #fff;
 }
 
 .sidebar ul {
   list-style-type: none;
+  padding-left: 0;
 }
 
 .sidebar li {
-  margin: 15px 0;
+  margin-bottom: 15px;
 }
 
 .sidebar a {
@@ -46,7 +49,7 @@ body {
   text-decoration: none;
   font-size: 16px;
   display: block;
-  padding: 10px;
+  padding: 10px 15px;
   border-radius: 8px;
   transition: background 0.3s;
 }
@@ -65,7 +68,7 @@ body {
 }
 
 .form-container {
-  background-color: #183e43a7;
+  background-color: rgba(255, 255, 255, 0.9);
   padding: 30px 40px;
   border-radius: 15px;
   box-shadow: 0 0 20px rgba(0,0,0,0.2);
@@ -75,7 +78,7 @@ body {
 
 .form-container h2 {
   text-align: center;
-  color: #1b4726;
+  color: #2e7d32;
   margin-bottom: 20px;
 }
 
@@ -87,6 +90,7 @@ form {
 label {
   margin-bottom: 8px;
   color: #333;
+  font-weight: bold;
 }
 
 select, textarea {
@@ -136,9 +140,9 @@ button[type="button"]:hover {
   top: -60px;
   left: 0;
   right: 0;
-  background-color: #4caf50; /* green */
+  background-color: #4caf50;
   color: white;
-  padding: 8px;
+  padding: 10px;
   text-align: center;
   font-size: 18px;
   font-weight: bold;

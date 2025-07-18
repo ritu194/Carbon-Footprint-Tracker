@@ -1,19 +1,71 @@
-/* ✅ Full background image setup */
-body {
+/* Reset */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   font-family: 'Segoe UI', sans-serif;
+}
+
+/* Body background */
+body {
   background: url('Carbon_Calculator.jpg') no-repeat center center fixed;
   background-size: cover;
+}
+
+/* Layout container */
+.container {
+  display: flex;
   height: 100vh;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background-color: rgba(0, 60, 0, 0.75);
+  color: white;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style-type: none;
+}
+
+.sidebar li {
+  margin: 15px 0;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  display: block;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background-color: #1b5e20;
+}
+
+/* Main content */
+.main-content {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* ✅ Main container */
-.container {
-  background: rgba(255, 255, 255, 0.92); /* light transparent white */
+/* Calculator form box */
+.calculator-box {
+  background: rgba(255, 255, 255, 0.92);
   padding: 2rem 3rem;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
@@ -21,26 +73,27 @@ body {
   max-width: 500px;
 }
 
-/* ✅ Headings */
-h1 {
+/* Heading */
+.calculator-box h1 {
   color: #2e7d32;
   margin-bottom: 1rem;
+  text-align: center;
 }
 
-/* ✅ Form layout */
+/* Form */
 form {
   display: flex;
   flex-direction: column;
 }
 
-/* ✅ Labels */
+/* Labels */
 label {
   margin-top: 1rem;
   color: #333;
   font-weight: 500;
 }
 
-/* ✅ Inputs & dropdowns */
+/* Inputs */
 select, input {
   padding: 0.6rem;
   margin-top: 0.3rem;
@@ -49,7 +102,7 @@ select, input {
   font-size: 1rem;
 }
 
-/* ✅ Button style */
+/* Button */
 button {
   margin-top: 1.5rem;
   padding: 10px;
@@ -67,7 +120,7 @@ button:hover {
   background-color: #1b5e20;
 }
 
-/* ✅ Result section */
+/* Result */
 .result {
   margin-top: 2rem;
   font-size: 1.2rem;
