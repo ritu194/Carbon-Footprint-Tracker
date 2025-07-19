@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up | Carbon Tracker</title>
+      <link rel="stylesheet" href="signup.css" />
+
+
+</head>
+<body>
+  <div class="signup-container">
+    <h1>🌱 Daily Life Carbon Tracker</h1>
+    <h2>Create Account</h2>
+    <form id="signupForm">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" placeholder="Enter your name" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter your email" required />
+
+      <label for="newUsername">Username</label>
+      <input type="text" id="newUsername" placeholder="Choose a username" required />
+
+      <label for="newPassword">Password</label>
+      <input type="password" id="newPassword" placeholder="Choose a password" required />
+
+      <button type="submit">Sign Up</button>
+    </form>
+    <p class="form-link">Already have an account? <a href="login.html">Log in</a></p>
+  </div>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const username = document.getElementById('newUsername').value.trim();
+      const password = document.getElementById('newPassword').value;
+
+      if (!name || !email || !username || !password) {
+        alert("❗ All fields are required.");
+        return;
+      }
+
+      // Example only: Save credentials temporarily (not secure, just demo)
+      localStorage.setItem('carbon_user', JSON.stringify({ username, password }));
+
+      alert("✅ Account created successfully! You can now log in.");
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>

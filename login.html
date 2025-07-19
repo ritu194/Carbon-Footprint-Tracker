@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | Carbon Tracker</title>
+    <link rel="stylesheet" href="login.css" />
+
+</head>
+<body>
+  <div class="login-container">
+    <h1>🌱 Daily Life Carbon Tracker</h1>
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label for="username">Username or Email</label>
+      <input type="text" id="username" placeholder="Enter your username or email" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password" required />
+
+      <button type="submit">Login</button>
+    </form>
+    <p class="form-link">Don’t have an account? <a href="signup.html">Create new account</a></p>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+
+      const validUsername = "rafsana";
+      const validPassword = "1234";
+
+      if (username === validUsername && password === validPassword) {
+        alert("✅ Login successful!");
+        window.location.href = "home.html";
+      } else {
+        alert("❌ Invalid username or password. Try again.");
+      }
+    });
+  </script>
+</body>
+</html>
