@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard | Carbon Tracker</title>
   <link rel="stylesheet" href="dashboard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="container">
     <!-- Sidebar -->
     <aside class="sidebar">
-      <h2>Carbon Tracker</h2>
+      <h2>🌿 Carbon Tracker</h2>
       <ul>
         <li><a href="admin-panel.html">👤 Admin Panel</a></li>
         <li><a href="home.html">🏠 Home</a></li>
@@ -22,62 +23,139 @@
       </ul>
     </aside>
 
-    <!-- Main Content -->
-    <main class="main-content">
-      <h1>📊 Emissions Dashboard</h1>
+    <!-- Main Dashboard -->
+    <main class="dashboard">
+      <h1>Carbon Footprint Dashboard</h1>
 
-      <div class="cards">
-        <div class="card">
-          <h3>🌍 Total Emissions</h3>
-          <p id="totalEmission">-- kg CO₂</p>
-        </div>
+      <div class="filters">
+        <label for="viewType">View:</label>
+        <select id="viewType">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
 
-        <div class="card">
-          <h3>🚗 Transport</h3>
-          <p id="transportData">-- kg CO₂</p>
-        </div>
+        <label for="fromDate">From:</label>
+        <input type="date" id="fromDate">
 
-        <div class="card">
-          <h3>⚡ Energy</h3>
-          <p id="energyData">-- kg CO₂</p>
-        </div>
+        <label for="toDate">To:</label>
+        <input type="date" id="toDate">
 
-        <div class="card">
-          <h3>🍽️ Food</h3>
-          <p id="foodData">-- kg CO₂</p>
-        </div>
-
-        <div class="card">
-          <h3>🗑️ Waste</h3>
-          <p id="wasteData">-- kg CO₂</p>
-        </div>
-
-        <div class="card">
-          <h3>👕 Clothing</h3>
-          <p id="clothingData">-- kg CO₂</p>
-        </div>
+        <button onclick="updateChart()">Apply Dummy Data</button>
       </div>
+
+      <div class="manual-entry">
+      </div>
+
+      <canvas id="carbonChart"></canvas>
     </main>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // Example dummy data (replace with backend or localStorage integration)
-    const emissionData = {
-      transport: 2.5,
-      energy: 4.2,
-      food: 3.0,
-      waste: 1.1,
-      clothing: 0.5
-    };
+    const ctx = document.getElementById('carbonChart').getContext('2d');
 
-    document.getElementById('transportData').textContent = `${emissionData.transport} kg CO₂`;
-    document.getElementById('energyData').textContent = `${emissionData.energy} kg CO₂`;
-    document.getElementById('foodData').textContent = `${emissionData.food} kg CO₂`;
-    document.getElementById('wasteData').textContent = `${emissionData.waste} kg CO₂`;
-    document.getElementById('clothingData').textContent = `${emissionData.clothing} kg CO₂`;
+    let chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Carbon Emissions (kg CO₂)',
+          data: [],
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 2,
+          tension: 0.3,
+          fill: true,
+          pointRadius: 5
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
 
-    const total = Object.values(emissionData).reduce((sum, val) => sum + val, 0);
-    document.getElementById('totalEmission').textContent = `${total.toFixed(2)} kg CO₂`;
+    function generateDummyData(viewType, from, to) {
+      let labels = [];
+      let data = [];
+
+      const startDate = new Date(from);
+      const endDate = new Date(to);
+      let current = new Date(startDate);
+
+      while (current <= endDate) {
+        let label;
+        switch (viewType) {
+          case 'daily':
+            label = current.toISOString().split('T')[0];
+            current.setDate(current.getDate() + 1);
+            break;
+          case 'weekly':
+            label = `Week ${getWeekNumber(current)}`;
+            current.setDate(current.getDate() + 7);
+            break;
+          case 'monthly':
+            label = `${current.getFullYear()}-${(current.getMonth() + 1).toString().padStart(2, '0')}`;
+            current.setMonth(current.getMonth() + 1);
+            break;
+        }
+        labels.push(label);
+        data.push((Math.random() * 10 + 5).toFixed(2));
+      }
+
+      return { labels, data };
+    }
+
+    function updateChart() {
+      const viewType = document.getElementById('viewType').value;
+      const from = document.getElementById('fromDate').value;
+      const to = document.getElementById('toDate').value;
+
+      if (!from || !to || new Date(from) > new Date(to)) {
+        alert('Please select a valid date range.');
+        return;
+      }
+
+      const { labels, data } = generateDummyData(viewType, from, to);
+      chart.data.labels = labels;
+      chart.data.datasets[0].data = data;
+      chart.update();
+    }
+
+    function addEntry() {
+      const date = document.getElementById('entryDate').value;
+      const value = parseFloat(document.getElementById('entryValue').value);
+
+      if (!date || isNaN(value)) {
+        alert('Please enter a valid date and emission value.');
+        return;
+      }
+
+      const index = chart.data.labels.indexOf(date);
+      if (index >= 0) {
+        chart.data.datasets[0].data[index] = value;
+      } else {
+        chart.data.labels.push(date);
+        chart.data.datasets[0].data.push(value);
+      }
+
+      chart.update();
+      document.getElementById('entryDate').value = '';
+      document.getElementById('entryValue').value = '';
+    }
+
+    function getWeekNumber(date) {
+      const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+      const dayNum = d.getUTCDay() || 7;
+      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+      return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    }
   </script>
 </body>
 </html>
