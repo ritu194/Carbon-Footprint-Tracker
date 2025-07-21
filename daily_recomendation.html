@@ -5,6 +5,87 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Daily Recommendations | Carbon Tracker</title>
   <link rel="stylesheet" href="daily_recomendation.css" />
+  <style>
+    /* Basic styling */
+    .input-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .input-group input {
+      flex: 1;
+    }
+    .unit-label {
+      font-weight: 500;
+      color: #2b7a2b;
+    }
+    form label {
+      margin-top: 10px;
+      display: block;
+      font-weight: bold;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+      padding-top: 60px;
+    }
+
+    .modal-content {
+      background-color: #eef9f2;
+      margin: 5% auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 128, 0, 0.2);
+      width: 90%;
+      max-width: 600px;
+      position: relative;
+    }
+
+    .close-btn {
+      color: #444;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      position: absolute;
+      right: 20px;
+      top: 15px;
+    }
+    .close-btn:hover {
+      color: #2b7a2b;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+    table, th, td {
+      border: 1px solid #b2d8b2;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #d4f1d4;
+    }
+
+    .tip {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -16,8 +97,8 @@
         <li><a href="home.html">🏠 Home</a></li>
         <li><a href="userActivityInput.html">📝 User Activity Input</a></li>
         <li><a href="dashboard.html">📊 Dashboard</a></li>
-        <li><a href="carbon_Calculator.html" >🧮 Calculate Carbon</a></li>
-        <li><a href="daily_recomendation.html" class="active">🌿 Daily Recommendation</a></li>
+        <li><a href="carbon_Calculator.html">🧮 Calculate Carbon</a></li>
+        <li><a href="daily_recommendation.html" class="active">🌿 Daily Recommendation</a></li>
         <li><a href="login.html">🚪 Logout</a></li>
       </ul>
     </aside>
@@ -28,93 +109,157 @@
         <h1>🌍 Daily Carbon Footprint Tracker</h1>
 
         <form id="carbonForm">
-          <label for="transport">🚗 Transport Emissions (kg CO₂):</label>
-          <input type="number" id="transport" placeholder="e.g., 2.5">
+          <label for="transport">🚗 Distance Travelled:</label>
+          <div class="input-group">
+            <input type="number" id="transport" placeholder="e.g., 15" step="any" min="0">
+            <span class="unit-label">km</span>
+          </div>
 
-          <label for="energy">⚡ Energy Emissions (kg CO₂):</label>
-          <input type="number" id="energy" placeholder="e.g., 4.2">
+          <label for="energy">⚡ Electricity Used:</label>
+          <div class="input-group">
+            <input type="number" id="energy" placeholder="e.g., 5" step="any" min="0">
+            <span class="unit-label">kWh</span>
+          </div>
 
-          <label for="food">🍽️ Food Emissions (kg CO₂):</label>
-          <input type="number" id="food" placeholder="e.g., 3.0">
+          <label for="food">🍽️ Meat Consumed:</label>
+          <div class="input-group">
+            <input type="number" id="food" placeholder="e.g., 300" step="any" min="0">
+            <span class="unit-label">grams</span>
+          </div>
 
-          <label for="waste">🗑️ Waste Emissions (kg CO₂):</label>
-          <input type="number" id="waste" placeholder="e.g., 1.1">
+          <label for="waste">🗑️ Waste Generated:</label>
+          <div class="input-group">
+            <input type="number" id="waste" placeholder="e.g., 2" step="any" min="0">
+            <span class="unit-label">kg</span>
+          </div>
 
-          <label for="clothing">👕 Clothing Emissions (kg CO₂):</label>
-          <input type="number" id="clothing" placeholder="e.g., 0.5">
+          <label for="clothing">👕 Clothes Purchased:</label>
+          <div class="input-group">
+            <input type="number" id="clothing" placeholder="e.g., 2" step="1" min="0">
+            <span class="unit-label">items</span>
+          </div>
 
           <button type="submit">Calculate Total Emission</button>
         </form>
-
-        <div id="result" class="result-box"></div>
       </div>
     </main>
   </div>
 
-  <script>
-    const suggestions = {
-      transport: [
-        "🚲 Use a bicycle or walk for short trips.",
-        "🚆 Take public transport instead of personal vehicles.",
-        "🚗 Carpool with friends or coworkers.",
-        "🛴 Use electric scooters for city travel."
-      ],
-      energy: [
-        "💡 Switch to energy-efficient LED bulbs.",
-        "🔌 Unplug devices when not in use.",
-        "🌞 Use natural light and ventilation.",
-        "🌿 Use energy-saving modes on appliances."
-      ],
-      food: [
-        "🥦 Eat more plant-based meals.",
-        "🍗 Replace red meat with chicken or vegetables.",
-        "🍽️ Avoid food waste by planning meals.",
-        "🌱 Buy local and seasonal produce."
-      ],
-      waste: [
-        "♻️ Separate and recycle household waste.",
-        "🛍️ Use reusable bags instead of plastic.",
-        "🥤 Avoid single-use plastics like cups or bottles.",
-        "📦 Repurpose or donate packaging materials."
-      ],
-      clothing: [
-        "👕 Buy fewer, higher-quality clothes.",
-        "🧺 Wash clothes in cold water.",
-        "♻️ Donate or recycle used garments.",
-        "🛒 Shop second-hand or vintage."
-      ]
-    };
+  <!-- Modal -->
+  <div id="emissionModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="modalClose">&times;</span>
+      <div id="modalBody"></div>
+    </div>
+  </div>
 
-    document.getElementById('carbonForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+<script>
+const emissionFactors = {
+  transport: 0.21,     // kg CO₂ per kilometer (car travel)
+  energy: 0.45,        // kg CO₂ per kilowatt-hour (kWh) of electricity
+  food: 0.000027,      // kg CO₂ per gram of meat (converted from 0.027 per 1000g)
+  waste: 1.5,          // kg CO₂ per kilogram of waste
+  clothing: 25         // kg CO₂ per clothing item (approximation per item)
+};
 
-      const categories = ["transport", "energy", "food", "waste", "clothing"];
-      let total = 0;
-      let selectedTips = [];
+const suggestions = {
+  transport: [
+    "🚲 Use a bicycle or walk for short trips.",
+    "🚆 Take public transport instead of personal vehicles.",
+    "🚗 Carpool with friends or coworkers.",
+    "🛴 Use electric scooters for city travel."
+  ],
+  energy: [
+    "💡 Switch to energy-efficient LED bulbs.",
+    "🔌 Unplug devices when not in use.",
+    "🌞 Use natural light and ventilation.",
+    "🌿 Use energy-saving modes on appliances."
+  ],
+  food: [
+    "🥦 Eat more plant-based meals.",
+    "🍗 Replace red meat with chicken or vegetables.",
+    "🍽️ Avoid food waste by planning meals.",
+    "🌱 Buy local and seasonal produce."
+  ],
+  waste: [
+    "♻️ Separate and recycle household waste.",
+    "🛍️ Use reusable bags instead of plastic.",
+    "🥤 Avoid single-use plastics like cups or bottles.",
+    "📦 Repurpose or donate packaging materials."
+  ],
+  clothing: [
+    "👕 Buy fewer, higher-quality clothes.",
+    "🧺 Wash clothes in cold water.",
+    "♻️ Donate or recycle used garments.",
+    "🛒 Shop second-hand or vintage."
+  ]
+};
 
-      categories.forEach(cat => {
-        const value = parseFloat(document.getElementById(cat).value) || 0;
-        if (value > 0) {
-          total += value;
-          const tipsForCat = suggestions[cat];
-          const shuffled = tipsForCat.sort(() => 0.5 - Math.random());
-          selectedTips.push(...shuffled.slice(0, 2));
-        }
-      });
+document.getElementById('carbonForm').addEventListener('submit', function(e) {
+  e.preventDefault();
 
-      const finalTips = selectedTips.slice(0, 5);
+  const categories = ["transport", "energy", "food", "waste", "clothing"];
+  let total = 0;
+  let selectedTips = [];
+  let dataTableRows = "";
 
-      document.getElementById('result').innerHTML = `
-        <div class="overlay">
-          <h2>🧾 Your Total CO₂ Emission Today:</h2>
-          <p><strong>${total.toFixed(2)} kg CO₂</strong></p>
-          ${finalTips.length ? `
-            <p class="tip"><strong>🌿 Personalized Suggestions:</strong></p>
-            <ul>${finalTips.map(tip => `<li>${tip}</li>`).join('')}</ul>
-          ` : `<p class="tip">🎉 No significant emissions today. Keep it up!</p>`}
-        </div>
-      `;
-    });
-  </script>
+  categories.forEach(cat => {
+    const value = parseFloat(document.getElementById(cat).value) || 0;
+    const emission = value * emissionFactors[cat];
+    total += emission;
+
+    dataTableRows += `
+      <tr>
+        <td>${cat.charAt(0).toUpperCase() + cat.slice(1)}</td>
+        <td>${emission.toFixed(2)} kg CO₂</td>
+      </tr>
+    `;
+
+    if (value > 0) {
+      const tipsForCat = suggestions[cat];
+      const shuffled = tipsForCat.sort(() => 0.5 - Math.random());
+      selectedTips.push(...shuffled.slice(0, 2));
+    }
+  });
+
+  const finalTips = selectedTips.slice(0, 5);
+
+  // Prepare modal content
+  const modalHTML = `
+    <h2>📊 Emission Summary:</h2>
+    <table>
+      <thead>
+        <tr><th>Category</th><th>Emission</th></tr>
+      </thead>
+      <tbody>${dataTableRows}</tbody>
+    </table>
+
+    <h3>🧾 Total CO₂ Emission: <strong>${total.toFixed(2)} kg CO₂</strong></h3>
+
+    ${finalTips.length ? `
+      <p class="tip">🌿 Personalized Suggestions:</p>
+      <ul>${finalTips.map(tip => `<li>${tip}</li>`).join('')}</ul>
+    ` : `<p class="tip">🎉 No significant emissions today. Keep it up!</p>`}
+  `;
+
+  // Show modal and insert content
+  const modal = document.getElementById('emissionModal');
+  document.getElementById('modalBody').innerHTML = modalHTML;
+  modal.style.display = "block";
+});
+
+// Close modal when clicking on close button
+document.getElementById('modalClose').onclick = function() {
+  document.getElementById('emissionModal').style.display = "none";
+};
+
+// Close modal when clicking outside the modal content
+window.onclick = function(event) {
+  const modal = document.getElementById('emissionModal');
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+};
+</script>
 </body>
 </html>

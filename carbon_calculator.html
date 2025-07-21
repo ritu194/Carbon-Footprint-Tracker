@@ -5,6 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Carbon Emission Calculator</title>
   <link rel="stylesheet" href="Carbon_Calculator.css" />
+  <style>
+    .input-with-unit {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .input-with-unit input {
+      width: 100%;
+      padding: 8px;
+      font-size: 1rem;
+    }
+
+    .input-with-unit span {
+      white-space: nowrap;
+      font-size: 1rem;
+      color: #444;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -39,12 +59,15 @@
           </select>
 
           <label for="activity">Select Activity:</label>
-          <select id="activity" required>
+          <select id="activity" onchange="updateQuantityLabel()" required>
             <option value="">Choose Activity</option>
           </select>
 
-          <label for="quantity">Quantity (e.g., km, items, meals):</label>
-          <input type="number" id="quantity" min="0.1" step="0.1" required />
+          <label for="quantity" id="quantity-label">Quantity:</label>
+          <div class="input-with-unit">
+            <input type="number" id="quantity" min="0.1" step="0.1" required />
+            <span id="unit-display"></span>
+          </div>
 
           <button type="submit">Calculate Emission</button>
         </form>
@@ -59,66 +82,88 @@
   <script>
     const activityOptions = {
       transport: {
-        "Drove a petrol car (per km)": 0.21,
-        "Rode a motorbike (per km)": 0.1,
-        "Took a bus (per trip)": 0.18,
-        "Took a domestic flight": 0.25,
-        "Used ride-sharing (per km)": 0.19,
+        "Drove a petrol car (per km)": { factor: 0.21, unit: "km" },
+        "Rode a motorbike (per km)": { factor: 0.1, unit: "km" },
+        "Took a bus (per trip)": { factor: 0.18, unit: "trip(s)" },
+        "Took a domestic flight": { factor: 0.25, unit: "flight(s)" },
+        "Used ride-sharing (per km)": { factor: 0.19, unit: "km" },
       },
       food: {
-        "Beef-based meal": 5.0,
-        "Mutton-based meal": 5.9,
-        "Chicken-based meal": 1.8,
-        "Vegetarian meal": 0.9,
-        "Food delivery order": 1.5,
-        "Bottled water (1 bottle)": 0.1,
+        "Beef-based meal": { factor: 5.0, unit: "meal(s)" },
+        "Mutton-based meal": { factor: 5.9, unit: "meal(s)" },
+        "Chicken-based meal": { factor: 1.8, unit: "meal(s)" },
+        "Vegetarian meal": { factor: 0.9, unit: "meal(s)" },
+        "Food delivery order": { factor: 1.5, unit: "order(s)" },
+        "Bottled water (1 bottle)": { factor: 0.1, unit: "bottle(s)" },
       },
       waste: {
-        "Threw away garbage (per kg)": 0.6,
-        "Used single-use plastic": 0.12,
-        "Didn’t recycle paper": 0.2,
-        "Disposal of food waste": 0.5,
-        "Used disposable cups/plates": 0.15,
+        "Threw away garbage (per kg)": { factor: 0.6, unit: "kg" },
+        "Used single-use plastic": { factor: 0.12, unit: "item(s)" },
+        "Didn’t recycle paper": { factor: 0.2, unit: "sheet(s)" },
+        "Disposal of food waste": { factor: 0.5, unit: "kg" },
+        "Used disposable cups/plates": { factor: 0.15, unit: "item(s)" },
       },
       clothing: {
-        "Bought a T-shirt": 2.1,
-        "Bought jeans": 6.5,
-        "Ordered clothes online": 3.0,
-        "Hot water laundry": 1.0,
-        "Threw away clothes": 0.7,
+        "Bought a T-shirt": { factor: 2.1, unit: "item(s)" },
+        "Bought jeans": { factor: 6.5, unit: "item(s)" },
+        "Ordered clothes online": { factor: 3.0, unit: "order(s)" },
+        "Hot water laundry": { factor: 1.0, unit: "load(s)" },
+        "Threw away clothes": { factor: 0.7, unit: "item(s)" },
       },
       energy: {
-        "Used air conditioner (1 hr)": 1.2,
-        "Used water heater (15 min)": 1.0,
-        "Used kitchen appliances (1 hr)": 0.8,
-        "Charged device (1 hr)": 0.05,
-        "Electricity used (1 kWh)": 0.4,
+        "Used air conditioner (1 hr)": { factor: 1.2, unit: "hr(s)" },
+        "Used water heater (15 min)": { factor: 1.0, unit: "15 min units" },
+        "Used kitchen appliances (1 hr)": { factor: 0.8, unit: "hr(s)" },
+        "Charged device (1 hr)": { factor: 0.05, unit: "hr(s)" },
+        "Electricity used (1 kWh)": { factor: 0.4, unit: "kWh" },
       }
     };
 
     function populateActivities() {
       const category = document.getElementById("category").value;
       const activitySelect = document.getElementById("activity");
+      const unitDisplay = document.getElementById("unit-display");
 
       activitySelect.innerHTML = `<option value="">--Choose Activity--</option>`;
+      unitDisplay.textContent = "";
 
       if (category && activityOptions[category]) {
         for (const activity in activityOptions[category]) {
           const option = document.createElement("option");
-          option.value = activityOptions[category][activity];
+          option.value = activity;
           option.textContent = activity;
           activitySelect.appendChild(option);
         }
+      }
+
+      document.getElementById("quantity-label").textContent = "Quantity:";
+    }
+
+    function updateQuantityLabel() {
+      const category = document.getElementById("category").value;
+      const activity = document.getElementById("activity").value;
+      const unitDisplay = document.getElementById("unit-display");
+
+      if (category && activityOptions[category][activity]) {
+        const unit = activityOptions[category][activity].unit;
+        document.getElementById("quantity-label").textContent = `Quantity:`;
+        unitDisplay.textContent = unit;
+      } else {
+        document.getElementById("quantity-label").textContent = "Quantity:";
+        unitDisplay.textContent = "";
       }
     }
 
     document.getElementById("activity-form").addEventListener("submit", function (e) {
       e.preventDefault();
 
+      const category = document.getElementById("category").value;
+      const activity = document.getElementById("activity").value;
       const quantity = parseFloat(document.getElementById("quantity").value);
-      const emissionFactor = parseFloat(document.getElementById("activity").value);
 
-      const totalEmission = (!isNaN(quantity) && !isNaN(emissionFactor)) ? (quantity * emissionFactor).toFixed(2) : "0.00";
+      const factor = activityOptions[category]?.[activity]?.factor;
+
+      const totalEmission = (!isNaN(quantity) && !isNaN(factor)) ? (quantity * factor).toFixed(2) : "0.00";
 
       document.getElementById("output").textContent = totalEmission;
     });

@@ -5,6 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>User Activity Input | Carbon Tracker</title>
   <link rel="stylesheet" href="UserActivityInput.css" />
+  <style>
+    .notification {
+      position: fixed;
+      top: -60px;
+      left: 0;
+      width: 100%;
+      background-color: #4caf50;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-weight: bold;
+      transition: top 0.5s ease;
+      z-index: 999;
+    }
+
+    .activity-table {
+      width: 100%;
+      margin-top: 2rem;
+      border-collapse: collapse;
+    }
+
+    .activity-table th, .activity-table td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+
+    .activity-table th {
+      background-color: #f0f0f0;
+    }
+  </style>
 </head>
 <body>
   <!-- Notification Bar -->
@@ -19,10 +50,10 @@
       <h2>🌱 Carbon Tracker</h2>
       <ul>
         <li><a href="admin-panel.html">👤 Admin Panel</a></li>
-        <li><a href="home.html" >🏠 Home</a></li>
-        <li><a href="userActivityInput.html"  class="active">📝 User Activity Input</a></li>
+        <li><a href="home.html">🏠 Home</a></li>
+        <li><a href="userActivityInput.html" class="active">📝 User Activity Input</a></li>
         <li><a href="dashboard.html">📊 Dashboard</a></li>
-        <li><a href="carbon_Calculator.html" >🧮 Calculate Carbon</a></li>
+        <li><a href="carbon_Calculator.html">🧮 Calculate Carbon</a></li>
         <li><a href="daily_recomendation.html">🌿 Daily Recommendation</a></li>
         <li><a href="login.html">🚪 Logout</a></li>
       </ul>
@@ -32,9 +63,9 @@
     <main class="main-content">
       <div class="form-container">
         <h2>Log Your Daily Activity</h2>
-        <form onsubmit="showNotification(event)">
+        <form id="activity-form" onsubmit="submitActivity(event)">
           <label for="category">Select Category</label>
-          <select id="category" required>
+          <select id="category" required onchange="updatePlaceholder()">
             <option value="">--Choose--</option>
             <option value="transport">Transport</option>
             <option value="energy">Energy</option>
@@ -43,27 +74,104 @@
           </select>
 
           <label for="details">Activity Details</label>
-          <textarea id="details" rows="4" placeholder="e.g., Drove 10 km by car" required></textarea>
+          <textarea id="details" rows="4" placeholder="Enter details..." required></textarea>
 
           <div class="btn-group">
             <button type="submit">Submit</button>
-            <button type="button" onclick="window.location.href='index.html'">Back to Home</button>
+            <button type="button" onclick="window.location.href='home.html'">Back to Home</button>
           </div>
         </form>
+
+        <!-- Table Display Section -->
+        <div id="activity-log">
+          <h3>Logged Activities</h3>
+          <table class="activity-table" id="activity-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Category</th>
+                <th>Details</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="activity-body">
+              <!-- Filled dynamically -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </main>
   </div>
 
-  <!-- Notification Script -->
+  <!-- Script -->
   <script>
-    function showNotification(event) {
-      event.preventDefault();
-      const bar = document.getElementById('notification-bar');
-      bar.style.top = '0';
-      setTimeout(() => {
-        bar.style.top = '-60px';
-      }, 3000);
+    function updatePlaceholder() {
+      const category = document.getElementById("category").value;
+      const details = document.getElementById("details");
+
+      switch (category) {
+        case "transport":
+          details.placeholder = "e.g., Drove 15 km by car or 5 km by bus";
+          break;
+        case "energy":
+          details.placeholder = "e.g., Used air conditioning for 5 hours or consumed 10 kWh electricity";
+          break;
+        case "food":
+          details.placeholder = "e.g., Ate 200g of beef or 1 vegetarian meal";
+          break;
+        case "waste":
+          details.placeholder = "e.g., Threw away 2 plastic bottles or 500g of food waste";
+          break;
+        default:
+          details.placeholder = "Enter details...";
+      }
     }
+
+    function submitActivity(event) {
+      event.preventDefault();
+      const category = document.getElementById("category").value;
+      const details = document.getElementById("details").value.trim();
+      const time = new Date().toLocaleString();
+
+      if (!category || !details) return;
+
+      const newEntry = { category, details, time };
+
+      const stored = JSON.parse(localStorage.getItem("userActivities")) || [];
+      stored.push(newEntry);
+      localStorage.setItem("userActivities", JSON.stringify(stored));
+
+      document.getElementById("activity-form").reset();
+      updatePlaceholder(); // Reset placeholder after submission
+
+      const bar = document.getElementById("notification-bar");
+      bar.style.top = "0";
+      setTimeout(() => {
+        bar.style.top = "-60px";
+      }, 3000);
+
+      displayActivities();
+    }
+
+    function displayActivities() {
+      const activityBody = document.getElementById("activity-body");
+      const stored = JSON.parse(localStorage.getItem("userActivities")) || [];
+
+      activityBody.innerHTML = "";
+
+      stored.forEach((entry, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${entry.category.charAt(0).toUpperCase() + entry.category.slice(1)}</td>
+          <td>${entry.details}</td>
+          <td>${entry.time}</td>
+        `;
+        activityBody.appendChild(row);
+      });
+    }
+
+    window.onload = displayActivities;
   </script>
 </body>
 </html>
